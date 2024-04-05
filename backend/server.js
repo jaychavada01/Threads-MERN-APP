@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import database from "./db/database.js";
 
 import userRoutes from "./routes/user.routes.js"
+import postRoutes from "./routes/post.routes.js"
 
 dotenv.config();
 database();
@@ -20,7 +21,7 @@ app.use(cookieParser());
 
 // Routes
 app.use("/api/users", userRoutes);
-// app.use("/api/posts", postRoutes);
+app.use("/api/posts", postRoutes);
 // app.use("/api/messages", messageRoutes);
 
 app.listen(PORT, () => {
