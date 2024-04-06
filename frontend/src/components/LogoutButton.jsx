@@ -11,7 +11,7 @@ const LogoutButton = () => {
   const [loading, setLoading] = useState(false);
 
   const handleLogout = async () => {
-    setLoading(true);
+    setLoading(!setUser ? false : true);
     try {
       const res = await fetch("/api/users/logout", {
         method: "POST",

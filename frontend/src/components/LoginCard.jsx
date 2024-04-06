@@ -36,7 +36,7 @@ export default function LoginCard() {
   });
 
   const handleLogin = async () => {
-    setLoading(true);
+    setLoading(!inputs ? false : true);
     try {
       const res = await fetch("/api/users/login", {
         method: "POST",

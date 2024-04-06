@@ -37,7 +37,7 @@ export default function SignupCard() {
 
   const handleSignup = async () => {
     // console.log(inputs);
-    setLoading(true);
+    setLoading(!inputs ? false : true);
     try {
       const res = await fetch("/api/users/signup", {
         method: "POST",
