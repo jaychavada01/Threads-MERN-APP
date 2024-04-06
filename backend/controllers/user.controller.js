@@ -1,11 +1,12 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import generateTokenSetCookie from "../utils/generateTokenSetCookies.js";
+import { v2 as cloudinary } from "cloudinary";
 
 const getUserProfile = async (req, res) => {
   const { username } = req.params;
   try {
-    const user = await User.findOne({username})
+    const user = await User.findOne({ username })
       .select("-password")
       .select("-updatedAt");
     if (!user) return res.status(404).json({ error: "User not found" });
@@ -50,6 +51,8 @@ const signupUser = async (req, res) => {
         name: newUser.name,
         email: newUser.email,
         username: newUser.username,
+        bio: newUser.bio,
+        profilePic: newUser.profile,
       });
     } else {
       res.status(400).json({ error: "Invalid user data!" });
@@ -164,6 +167,17 @@ const updateUser = async (req, res) => {
       user.password = hashedPassword;
     }
 
+    // pictures uploading to cloudinary
+    if (profilePic) {
+      if (user.profilePic) {
+        await cloudinary.uploader.destroy(
+          user.profilePic.split("/").pop().split(".")[0]
+        );
+      }
+      const uploadedResponse = await cloudinary.uploader.upload(profilePic);
+      profilePic = uploadedResponse.secure_url;
+    }
+
     user.name = name || user.name;
     user.email = email || user.email;
     user.username = username || user.username;
@@ -172,7 +186,7 @@ const updateUser = async (req, res) => {
 
     user = await user.save();
 
-    res.status(200).json({ message: "Profile Updated successfully!", user });
+    res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ error: error.message });
     console.log("Error in updateUser controller:", error);
