@@ -33,10 +33,15 @@ export default function SignupCard() {
     username: "",
     email: "",
     password: "",
+    Confirmpassword: "",
   });
 
   const handleSignup = async () => {
     // console.log(inputs);
+    if (inputs.password !== inputs.Confirmpassword) {
+      showToast("Error", "Passwords do not match.", "error");
+      return;
+    }
     setLoading(!inputs ? false : true);
     try {
       const res = await fetch("/api/users/signup", {
@@ -55,13 +60,13 @@ export default function SignupCard() {
       setUser(data);
     } catch (error) {
       showToast("Error", error, "error");
-    } finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Flex align={"center"} justify={"center"}>
+    <Flex align={"center"} justify={"center"} mb={10}>
       <Stack spacing={8} mx={"auto"} maxW={"lg"} px={6}>
         <Stack align={"center"}>
           <Heading
@@ -137,9 +142,31 @@ export default function SignupCard() {
                 </InputRightElement>
               </InputGroup>
             </FormControl>
+            <FormControl isRequired>
+              <FormLabel>Confirm Password</FormLabel>
+              <InputGroup>
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  onChange={(e) =>
+                    setInputs({ ...inputs, Confirmpassword: e.target.value })
+                  }
+                  value={inputs.Confirmpassword}
+                />
+                <InputRightElement h={"full"}>
+                  <Button
+                    variant={"ghost"}
+                    onClick={() =>
+                      setShowPassword((showPassword) => !showPassword)
+                    }
+                  >
+                    {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+            </FormControl>
             <Stack spacing={10} pt={2}>
               <Button
-                loadingText="Submitting"
+                loadingText="Signing Up..."
                 size="lg"
                 bg={useColorModeValue("blue.500", "green.500")}
                 color={"white"}

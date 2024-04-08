@@ -117,7 +117,7 @@ export default function LoginCard() {
             </FormControl>
             <Stack spacing={10} pt={2}>
               <Button
-                loadingText="Submitting"
+                loadingText="Logging in..."
                 size="lg"
                 bg={useColorModeValue("blue.500", "green.500")}
                 color={"white"}

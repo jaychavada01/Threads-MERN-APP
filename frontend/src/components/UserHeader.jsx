@@ -9,54 +9,14 @@ import { Link as RouterLink } from "react-router-dom";
 
 import { BsInstagram } from "react-icons/bs";
 import { CgMoreO } from "react-icons/cg";
-import { useState } from "react";
 import useShowToast from "../hooks/useShowToast";
+import useFollowUnfollow from "../hooks/useFollowUnfollow";
 
 const UserHeader = ({ user }) => {
   const showToast = useShowToast();
   const currentUser = useRecoilValue(userAtom); // logged in user
-  const [following, setFollowing] = useState(
-    user.followers.includes(currentUser._id)
-  );
-  const [updating, setUpdating] = useState(false);
 
-  const handleFollowUnfollow = async () => {
-    if (!currentUser) {
-      showToast("Error", "Please login to follow", "error");
-      return;
-    }
-    if (updating) return;
-    setUpdating(true);
-
-    try {
-      const res = await fetch(`/api/users/follow/${user._id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await res.json();
-      if (data.error) {
-        showToast("Error", data.error, "error");
-        return;
-      }
-
-      if (following) {
-        showToast("Success", `Unfollowed ${user.name}`, "success");
-        user.followers.pop(); // simulate removing from followers
-      } else {
-        showToast("Success", `Followed ${user.name}`, "success");
-        user.followers.push(currentUser?._id); // simulate adding to followers
-      }
-      setFollowing(!following);
-
-      console.log(data);
-    } catch (error) {
-      showToast("Error", error, "error");
-    } finally {
-      setUpdating(false);
-    }
-  };
+  const { handleFollowUnfollow, following, updating } = useFollowUnfollow(user);
 
   const copyURL = () => {
     const currentURL = window.location.href;
@@ -116,14 +76,14 @@ const UserHeader = ({ user }) => {
 
       {/* follow unfollow button */}
 
-      {currentUser._id === user._id && (
+      {currentUser?._id === user._id && (
         <Link as={RouterLink} to="/update">
           <Button size={"sm"}>Update Profile</Button>
         </Link>
       )}
-      {currentUser._id !== user._id && (
+      {currentUser?._id !== user._id && (
         <Button size={"sm"} onClick={handleFollowUnfollow} isLoading={updating}>
-          {following ? "Unfollow" : "Follow"}{" "}
+          {following ? "Unfollow" : "Follow"}
         </Button>
       )}
 
