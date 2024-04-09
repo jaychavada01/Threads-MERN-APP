@@ -1,7 +1,6 @@
 import { Container } from "@chakra-ui/react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
-
 import UserPage from "./pages/UserPage";
 import PostPage from "./pages/PostPage";
 import Header from "./components/Header";
@@ -15,7 +14,7 @@ import CreatePost from "./components/CreatePost";
 function App() {
   const user = useRecoilValue(userAtom);
   // console.log(user);
-	const { pathname } = useLocation();
+  const { pathname } = useLocation();
 
   return (
     <Container
@@ -36,10 +35,21 @@ function App() {
           element={user ? <UpdateProfilePage /> : <Navigate to="/auth" />}
         />
 
-        <Route path="/:username" element={<UserPage />} />
+        <Route
+          path="/:username"
+          element={
+            user ? (
+              <>
+                <UserPage />
+                <CreatePost />
+              </>
+            ) : (
+              <UserPage />
+            )
+          }
+        />
         <Route path="/:username/post/:pid" element={<PostPage />} />
       </Routes>
-      {user && <CreatePost />}
     </Container>
   );
 }

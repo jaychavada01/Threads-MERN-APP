@@ -13,6 +13,7 @@ import { AiFillHome } from "react-icons/ai";
 import { RxAvatar } from "react-icons/rx";
 import { BsFillChatQuoteFill } from "react-icons/bs";
 import { MdOutlineSettings } from "react-icons/md";
+import { BiLogIn, BiLogOut } from "react-icons/bi";
 
 const Header = () => {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -27,13 +28,16 @@ const Header = () => {
           <AiFillHome size={24} />
         </Link>
       )}
+
       {!user && (
         <Link
           as={RouterLink}
           to={"/auth"}
           onClick={() => setAuthScreen("login")}
         >
-          <Button>Login</Button>
+          <Button>
+            Login <BiLogIn size={24} />
+          </Button>
         </Link>
       )}
 
@@ -68,7 +72,9 @@ const Header = () => {
           to={"/auth"}
           onClick={() => setAuthScreen("signup")}
         >
-          <Button>Signup</Button>
+          <Button>
+            Signup <BiLogOut size={24} />
+          </Button>
         </Link>
       )}
     </Flex>

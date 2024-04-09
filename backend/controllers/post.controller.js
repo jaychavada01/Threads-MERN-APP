@@ -37,7 +37,7 @@ const createPost = async (req, res) => {
     const newPost = new Post({ postedBy, text, img });
     await newPost.save();
 
-    res.status(201).json({ message: "Post created successfully!", newPost });
+    res.status(201).json(newPost);
   } catch (error) {
     res.status(500).json({ error: error.message });
     console.log("Error in createPost controller:", error);
@@ -69,6 +69,12 @@ const deletePost = async (req, res) => {
     // checking post is deleting by owner or not
     if (post.postedBy.toString() !== req.user._id.toString()) {
       return res.status(401).json({ error: "Unauthorized to delete post" });
+    }
+
+    // post img deletion from cloudinary
+    if (post.img) {
+      const imgId = post.img.split("/").pop().split(".")[0];
+      await cloudinary.uploader.destroy(imgId);
     }
 
     await Post.findByIdAndDelete(req.params.id);
@@ -133,7 +139,7 @@ const replyToPost = async (req, res) => {
     post.replies.push(reply);
     await post.save();
 
-    res.status(200).json({ message: "Reply added successfully!", reply });
+    res.status(200).json(reply);
   } catch (error) {
     res.status(500).json({ error: error.message });
     console.log("Error in replyToPost controller:", error);
@@ -161,6 +167,24 @@ const getFeedPosts = async (req, res) => {
   }
 };
 
+const getUserPosts = async (req, res) => {
+  const { username } = req.params;
+  try {
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const posts = await Post.find({ postedBy: user._id }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json(posts);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 export {
   createPost,
   getPost,
@@ -168,4 +192,5 @@ export {
   likeUnlikePost,
   replyToPost,
   getFeedPosts,
+  getUserPosts,
 };

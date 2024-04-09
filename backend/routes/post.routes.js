@@ -7,6 +7,7 @@ import {
   likeUnlikePost,
   replyToPost,
   getFeedPosts,
+  getUserPosts,
 } from "../controllers/post.controller.js";
 
 const router = express.Router();
@@ -14,6 +15,7 @@ const router = express.Router();
 router.get("/feed", protectRoute, getFeedPosts);
 
 router.get("/:id", getPost);
+router.get("/user/:username", getUserPosts);
 router.post("/create", protectRoute, createPost);
 router.delete("/:id", protectRoute, deletePost);
 

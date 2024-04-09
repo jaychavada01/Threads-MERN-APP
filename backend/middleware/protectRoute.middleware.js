@@ -5,11 +5,12 @@ const protectRoute = async (req, res, next) => {
   try {
     const token = req.cookies.jwt;
 
-    if (!token) return res.status(401).json({ message: "Unauthorized!" });
+    if (!token) return res.status(401).json({ message: "Unauthorized" });
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // checking in database if this user is exists or not
+
     const user = await User.findById(decoded.userId).select("-password");
 
     req.user = user;
@@ -17,7 +18,7 @@ const protectRoute = async (req, res, next) => {
     next();
   } catch (err) {
     res.status(500).json({ message: err.message });
-    console.log("Error in protect Route middleware: ", err.message);
+    console.log("Error in signupUser: ", err.message);
   }
 };
 

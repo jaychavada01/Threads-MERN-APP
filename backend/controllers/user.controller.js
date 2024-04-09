@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import Post from "../models/post.model.js";
 import bcrypt from "bcryptjs";
 import generateTokenSetCookie from "../utils/generateTokenSetCookies.js";
 import { v2 as cloudinary } from "cloudinary";
@@ -199,6 +200,21 @@ const updateUser = async (req, res) => {
     user.bio = bio || user.bio;
 
     user = await user.save();
+
+    // Find all posts that this user replied and update username and userProfilePic fields
+    await Post.updateMany(
+      { "replies.userId": userId },
+      {
+        $set: {
+          "replies.$[reply].username": user.username,
+          "replies.$[reply].userProfilePic": user.profilePic,
+        },
+      },
+      { arrayFilters: [{ "reply.userId": userId }] }
+    );
+
+    // password should be null in response
+    user.password = null;
 
     res.status(200).json(user);
   } catch (error) {

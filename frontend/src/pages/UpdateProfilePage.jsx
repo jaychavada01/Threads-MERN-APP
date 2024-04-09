@@ -12,12 +12,14 @@ import {
   Avatar,
   Center,
 } from "@chakra-ui/react";
+
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useRecoilState } from "recoil";
 import userAtom from "../atoms-recoil/userAtom";
 import { useRef, useState } from "react";
 import usePreviewImg from "../hooks/usePreviewImg";
 import useShowToast from "../hooks/useShowToast";
+
 
 export default function UserProfileEdit() {
   const [user, setUser] = useRecoilState(userAtom);
@@ -202,16 +204,6 @@ export default function UserProfileEdit() {
           </FormControl>
 
           <Stack spacing={6} direction={["column", "row"]}>
-            <Button
-              bg={"red.400"}
-              color={"black"}
-              w="full"
-              _hover={{
-                bg: "red.600",
-              }}
-            >
-              Cancel
-            </Button>
             <Button
               type="submit"
               bg={"green.400"}
