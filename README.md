@@ -1,5 +1,7 @@
 # Mern Project : Threads App
 
+`Open the app` : [Threads-App](https://threads-mern-app.onrender.com)
+
 ### Feature List:
 
 -   🌟 Tech stack: MERN + Chakra UI
