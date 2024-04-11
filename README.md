@@ -1,8 +1,8 @@
-# Mern Project : Threads App with Real-Time Chat Functionality
+# Mern Project : Threads App
 
 ### Feature List:
 
--   🌟 Tech stack: MERN + Socket.io + Chakra UI
+-   🌟 Tech stack: MERN + Chakra UI
 -   🎃 Authentication & Authorization with JWT
 -   📝 Create Post
 -   🗑️ Delete Post
@@ -12,10 +12,6 @@
 -   ❄️ Freeze Your Account
 -   🌓 Dark/Light Mode
 -   📱 Completely Responsive
--   💬 Chat App With Image Support
--   👀 Seen/Unseen Status for Messages
--   🔊 Notification sounds
--   ⭐ Deployment for FREE
 
 ### Setup .env file
 
